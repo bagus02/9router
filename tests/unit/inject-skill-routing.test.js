@@ -45,6 +45,22 @@ describe("injectActiveSkills routing modes (real module)", () => {
     const injected = await mods.injectActiveSkills(body, "openai", ["watermarks-remover"], {});
     expect(injected).toEqual(["watermarks-remover"]);
   });
+
+  it("smart: searches translated Kiro conversation state", async () => {
+    const body = {
+      conversationState: {
+        history: [],
+        currentMessage: {
+          userInputMessage: { content: "Please remove the watermark" },
+        },
+      },
+    };
+    const injected = await mods.injectActiveSkills(body, "kiro", ["watermarks-remover"], {
+      "watermarks-remover": "smart",
+    });
+    expect(injected).toEqual(["watermarks-remover"]);
+    expect(JSON.stringify(body)).toContain("WATERMARK_PROMPT_X");
+  });
 });
 
 describe("smartMatches word boundaries (real module)", () => {

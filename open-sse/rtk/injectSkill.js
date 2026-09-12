@@ -53,6 +53,18 @@ function msgText(m) {
 
 // Lowercased concatenation of the last few user messages, used for smart routing.
 function userText(body) {
+  const kiroState = body?.conversationState;
+  if (kiroState && typeof kiroState === "object") {
+    const kiroMsgs = [
+      ...(Array.isArray(kiroState.history) ? kiroState.history : []),
+      kiroState.currentMessage,
+    ]
+      .filter((item) => item?.userInputMessage)
+      .map((item) => item.userInputMessage)
+      .slice(-3);
+    return kiroMsgs.map(msgText).join(" ").toLowerCase();
+  }
+
   const msgs =
     Array.isArray(body?.messages) ? body.messages :
     Array.isArray(body?.contents) ? body.contents :
