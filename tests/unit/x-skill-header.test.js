@@ -11,9 +11,20 @@
 // which is why only a live probe caught it.
 //
 // These tests pin the bridge itself: the shape chat.js actually produces.
+//
+// NOTE: injectSkill.js imports "@/lib/skillsRegistry.js" (db-backed), so the
+// module must be mocked before it is loaded, and loaded via a relative path —
+// this repo has no vitest alias for bare "open-sse/..." specifiers.
 
-import { describe, it, expect } from "vitest";
-import { resolveActiveSkillIds, readHeaderValue } from "open-sse/rtk/injectSkill.js";
+import { describe, it, expect, vi, beforeEach } from "vitest";
+
+let resolveActiveSkillIds, readHeaderValue;
+
+beforeEach(async () => {
+  vi.resetModules();
+  vi.doMock("@/lib/skillsRegistry.js", () => ({ getInstalledSkills: async () => [] }));
+  ({ resolveActiveSkillIds, readHeaderValue } = await import("../../open-sse/rtk/injectSkill.js"));
+});
 
 const DB_SKILLS = ["human-handwritten"];
 
