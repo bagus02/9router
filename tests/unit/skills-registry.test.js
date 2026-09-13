@@ -20,7 +20,7 @@ describe("skillsRegistry", () => {
   });
 
   it("returns [] when no skills dir exists (fail-open)", async () => {
-    const { getInstalledSkills } = await import("../../../src/lib/skillsRegistry.js");
+    const { getInstalledSkills } = await import("../../src/lib/skillsRegistry.js");
     const skills = await getInstalledSkills();
     expect(Array.isArray(skills)).toBe(true);
     expect(skills.length).toBe(0);
@@ -41,7 +41,7 @@ describe("skillsRegistry", () => {
       })
     );
 
-    const { getInstalledSkills } = await import("../../../src/lib/skillsRegistry.js");
+    const { getInstalledSkills } = await import("../../src/lib/skillsRegistry.js");
     const skills = await getInstalledSkills();
     expect(skills.length).toBe(1);
     expect(skills[0].id).toBe("demo");
@@ -53,7 +53,7 @@ describe("skillsRegistry", () => {
     fs.mkdirSync(path.join(tmp, "skills", "other"), { recursive: true });
     fs.writeFileSync(path.join(tmp, "skills", "other", "manifest.json"), JSON.stringify({ id: "other", hook: "other-hook" }));
 
-    const { getInstalledSkills } = await import("../../../src/lib/skillsRegistry.js");
+    const { getInstalledSkills } = await import("../../src/lib/skillsRegistry.js");
     const skills = await getInstalledSkills();
     expect(skills.length).toBe(0);
   });
@@ -62,7 +62,7 @@ describe("skillsRegistry", () => {
     fs.mkdirSync(path.join(tmp, "skills", "broken"), { recursive: true });
     fs.writeFileSync(path.join(tmp, "skills", "broken", "manifest.json"), "not json{");
 
-    const { getInstalledSkills } = await import("../../../src/lib/skillsRegistry.js");
+    const { getInstalledSkills } = await import("../../src/lib/skillsRegistry.js");
     const skills = await getInstalledSkills();
     expect(skills.length).toBe(0);
   });

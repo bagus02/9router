@@ -31,7 +31,7 @@ async function loadUpdater(fetchImpl) {
   vi.resetModules();
   const origFetch = global.fetch;
   if (fetchImpl) global.fetch = fetchImpl;
-  const mod = await import("../../../src/lib/addonUpdater.js");
+  const mod = await import("../../src/lib/addonUpdater.js");
   mod.clearAddonFetchCache();
   return { mod, restore: () => (global.fetch = origFetch) };
 }
